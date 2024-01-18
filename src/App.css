@@ -1,8 +1,9 @@
 #root {
-  max-width: 1280px;
+  max-width: 1920px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  position: relative;
 }
 
 .logo {
@@ -47,7 +48,7 @@
   border-radius: 0.5rem;
   border: 2px solid black;
   background-color: azure;
-  position: relative;
+  position: absolute;
 }
 
 .square {
@@ -56,4 +57,42 @@
   background-color: orange;
   display: block;
   position: absolute;
+}
+
+.top-bar-container {
+  display: flex;
+  column-gap: 0.5rem;
+
+  border-bottom: 1px solid black;
+  justify-content: space-between;
+  width: 100%;
+}
+.select-group {
+  display: flex;
+  column-gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.select-group > select {
+  padding-right: 5rem;
+  padding-left: 0.5rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 50%;
+
+  border-radius: 0.5rem;
+}
+
+.move-handler {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  padding: 0.5rem;
+  /* position: absolute; */
 }

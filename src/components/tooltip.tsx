@@ -5,46 +5,77 @@ interface TooltipProps {
     isVisible: boolean,
     squareRef: React.RefObject<HTMLDivElement | null>
     toolTipRef: React.RefObject<HTMLDivElement>
-    currentPosition: string
+    currentPosition: string,
+    offsetX: number,
+    offsetY: number
 }
 
 export default function Tooltip({ tooltipTitle
     , isVisible,
-    currentPosition, squareRef, toolTipRef }: TooltipProps) {
+    currentPosition,
+    squareRef,
+    toolTipRef, offsetX, offsetY }: TooltipProps) {
 
 
     const squareRect = squareRef.current?.getBoundingClientRect();
-
-
-
-
 
     const tooltip_position = {
         x: squareRect && squareRect.left,
         y: squareRect && squareRect.top
     }
 
-    if (currentPosition === "top") {
+    function setTop() {
+        tooltip_position.y = squareRect?.top;
         if (tooltip_position.y) tooltip_position.y -= 35;
         if (tooltip_position.x) tooltip_position.x = squareRect?.left;
     }
-    if (currentPosition === "bottom") {
+    function setBottom() {
+        tooltip_position.y = squareRect?.top;
         if (tooltip_position.y) tooltip_position.y += squareRect ? (squareRect.height + 10) : 0
         if (tooltip_position.x) tooltip_position.x = squareRect?.left
-
+    }
+    function setLeft() {
+        tooltip_position.x = squareRect?.left;
+        if (tooltip_position.x) tooltip_position.x -= squareRect ? (squareRect.width + 10) : 0
+        if (tooltip_position.y) tooltip_position.y = squareRect?.top && squareRect?.top + 30;
 
     }
-    if (currentPosition === "right") {
+    function setRight() {
+        tooltip_position.x = squareRect?.left;
         if (tooltip_position.x) tooltip_position.x += squareRect ? (squareRect.width + 10) : 0
         if (tooltip_position.y) tooltip_position.y = squareRect?.top && squareRect?.top + 30;
 
     }
 
+
+
+    if (currentPosition === "top") {
+
+        setTop();
+        if (offsetY < 100) {
+            setBottom();
+        }
+    }
+    if (currentPosition === "bottom") {
+
+        setBottom();
+        if (offsetY > 390) {
+            setTop();
+        }
+
+    }
+    if (currentPosition === "right") {
+        setRight();
+        if (offsetX > 350) {
+            setLeft();
+        }
+    }
+
     if (currentPosition === "left") {
-        if (tooltip_position.x) tooltip_position.x -= squareRect ? (squareRect.width + 10) : 0
-        if (tooltip_position.y) tooltip_position.y = squareRect?.top && squareRect?.top + 30;
-
-
+        setLeft();
+        if (offsetX < 0) {
+            setRight();
+        }
 
     }
 
