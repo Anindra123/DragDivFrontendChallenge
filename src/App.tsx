@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import './App.css'
 import Square from './components/square';
+import { WRAPPER_CONTAINER_HEIGHT, WRAPPER_CONTAINER_WIDTH } from './constants/constants';
 
 const intial_positon = {
   x: 250, y: 250
@@ -13,13 +14,15 @@ const inital_parent_position = {
 
 function App() {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const wrapperRect = wrapperRef.current?.getBoundingClientRect();
+  // const wrapperRect = wrapperRef.current?.getBoundingClientRect();
   const [divPosition, setDivPosition] = useState(intial_positon);
   const [parentPostion, setParentPosition] = useState(inital_parent_position)
   const [currentPosition, setCurrentPosition] = useState("top");
   const topBarRef = useRef<HTMLDivElement | null>(null)
 
+
   let parentStartPosition = { x: 0, y: 0 }
+
   function handleMouseDown(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
 
     parentStartPosition = { x: e.clientX - parentPostion.x, y: e.clientY - parentPostion.y }
@@ -32,13 +35,11 @@ function App() {
   function handleMouseMove(e: MouseEvent) {
     const new_X = e.clientX - (parentStartPosition.x === 0 ? e.clientX : parentStartPosition.x);
     const new_Y = e.clientY - (parentStartPosition.x === 0 ? e.clientY : parentStartPosition.y);
-    const body_X = document.documentElement.clientWidth -
-      (wrapperRect?.width ? wrapperRect.width : 0);
-    const body_Y = document.documentElement.clientHeight -
-      (wrapperRect?.height ? wrapperRect.height : 0);
+    const body_X = document.documentElement.clientWidth - WRAPPER_CONTAINER_WIDTH;
+    const body_Y = document.documentElement.clientHeight - WRAPPER_CONTAINER_HEIGHT;
 
-    const bounded_X = Math.min(Math.max(new_X, 0), body_X ? body_X : 0)
-    const bounded_Y = Math.min(Math.max(new_Y, 0), body_Y ? body_Y : 0)
+    const bounded_X = Math.min(Math.max(new_X, 0), body_X)
+    const bounded_Y = Math.min(Math.max(new_Y, 0), body_Y)
 
     setParentPosition({ x: bounded_X, y: bounded_Y })
   }
@@ -53,7 +54,6 @@ function App() {
     <>
 
 
-      {/* <div style={{ position: "absolute", left: `${parentPostion.x}px`, top: `${parentPostion.y}px`, width: "max-content" }}> */}
 
       <div className='wrapper' style={{
         left: `${parentPostion.x}px`
@@ -83,7 +83,6 @@ function App() {
           </a>
         </div>
       </div >
-      {/* </div> */}
 
 
 

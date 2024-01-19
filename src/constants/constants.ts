@@ -1,0 +1,4 @@
+export const WRAPPER_CONTAINER_HEIGHT = 604;
+export const WRAPPER_CONTAINER_WIDTH = 604;
+export const SMALL_BOX_HEIGHT = 104;
+export const SMALL_BOX_WIDTH = 104;
