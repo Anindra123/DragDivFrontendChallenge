@@ -8,6 +8,8 @@ import {
   WINDOW_WIDTH,
   WRAPPER_CONTAINER_HEIGHT, WRAPPER_CONTAINER_WIDTH
 } from './constants/constants';
+import BorderGroup from './components/border-group';
+
 
 
 
@@ -64,7 +66,7 @@ function App() {
 
   function handleMouseResizeMove(e: PointerEvent) {
     const temp_size = { ...containerSize }
-    console.log(resizePostion);
+    const temp_parent_position = { ...parentPostion }
     if (resizePostion === "right") {
       const newWidth = containerSize.width
         + (e.clientX - (parentPostion.x + parentSize.width));
@@ -80,11 +82,11 @@ function App() {
     }
 
     if (resizePostion === "top") {
+      temp_parent_position.y = Math.max(Math.min(e.clientY, parentPostion.y), 0);
+
       const newHeight = containerSize.height +
-        (e.clientY - (parentPostion.y + parentSize.height));
-
-      temp_size.height = Math.min(Math.max(newHeight, WRAPPER_CONTAINER_HEIGHT), WINDOW_HEIGHT);
-
+        (parentPostion.y - temp_parent_position.y);
+      temp_size.height = Math.max(newHeight, parentSize.height);
     }
 
     if (resizePostion === "bottom-right") {
@@ -99,8 +101,8 @@ function App() {
     }
 
 
-
     setParentSize(temp_size)
+    setParentPosition(temp_parent_position);
   }
 
   function handleMouseResizeUp() {
@@ -111,90 +113,9 @@ function App() {
 
   return (
     <>
-
-
-      <div className="wrapper-border" id='right'
-        style={{
-          width: "1px",
-          left: `${parentSize.width + parentPostion.x}px`
-          , top: `${parentPostion.y + 25}px`,
-          height: `${parentSize.height - 50}px`
-        }} onPointerDown={handleMouseResizeDown}>
-
-      </div>
-      <div className='wrapper-border' id='bottom'
-
-        style={{
-          width: `${parentSize.width - 50}px`,
-          top: `${parentSize.height + parentPostion.y}px`,
-          left: `${parentPostion.x + 25}px`,
-          height: "1px",
-        }}
-        onPointerDown={handleMouseResizeDown}
-      >
-      </div>
-      <div className="wrapper-border" id='bottom-right'
-        style={
-          {
-            width: `50px`,
-            height: `50px`,
-            top: `${parentSize.height + parentPostion.y - 51}px`,
-            left: `${parentSize.width + parentPostion.x - 51}px`,
-
-          }} onPointerDown={handleMouseResizeDown}>
-
-      </div>
-      <div className="wrapper-border" id='top-right'
-        style={
-          {
-            width: `50px`,
-            height: `50px`,
-            top: `${parentPostion.y - 1}px`,
-            left: `${parentSize.width + parentPostion.x - 51}px`,
-
-          }} onPointerDown={handleMouseResizeDown}>
-
-      </div>
-      <div className="wrapper-border" id='top-left'
-        style={
-          {
-            width: `50px`,
-            height: `50px`,
-            top: `${parentPostion.y - 1}px`,
-            left: `${parentPostion.x - 1}px`,
-
-          }} onPointerDown={handleMouseResizeDown}>
-
-      </div>
-      <div className="wrapper-border" id='bottom-left'
-        style={
-          {
-            width: `50px`,
-            height: `50px`,
-            top: `${parentSize.height + parentPostion.y - 51}px`,
-            left: `${parentPostion.x - 1}px`,
-
-          }} onPointerDown={handleMouseResizeDown}>
-
-      </div>
-      <div className="wrapper-border" id='top'
-        style={{
-          width: `${parentSize.width - 50}px`,
-          height: "1px",
-          top: `${parentPostion.y - 1}px`,
-          left: `${parentPostion.x + 25}px`,
-
-        }} onPointerDown={handleMouseResizeDown}>
-      </div>
-      <div className="wrapper-border" id='left'
-        style={{
-          width: `1px`,
-          height: `${parentSize.height - 50}px`,
-          top: `${parentPostion.y + 25}px`,
-          left: `${parentPostion.x - 2}px`
-        }} onPointerDown={handleMouseResizeDown}>
-
-      </div>
+      <BorderGroup parentPosition={parentPostion}
+        parentSize={parentSize} handleMouseResizeDown={handleMouseResizeDown}
+      />
 
       <div className='wrapper' style={{
         left: `${parentPostion.x}px`
