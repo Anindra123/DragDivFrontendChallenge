@@ -4,11 +4,11 @@ import Square from './components/square';
 import {
   INITIAL_BOX_POSITION, INITIAL_PARENT_POSITION,
   INITIAL_PARENT_SIZE,
-  WINDOW_HEIGHT,
-  WINDOW_WIDTH,
   WRAPPER_CONTAINER_HEIGHT, WRAPPER_CONTAINER_WIDTH
 } from './constants/constants';
 import BorderGroup from './components/border-group';
+// import { bottom, left, right, top } from './helper/ResizeFunctions';
+import { handleResize } from './helper/HandleResizeFunction';
 
 
 
@@ -19,7 +19,6 @@ function App() {
   const [parentPostion, setParentPosition] = useState(INITIAL_PARENT_POSITION)
   const [parentSize, setParentSize] = useState(INITIAL_PARENT_SIZE)
   const [currentPosition, setCurrentPosition] = useState("top");
-  // const [resizePostion, setResizePosition] = useState("right");
   const topBarRef = useRef<HTMLDivElement | null>(null)
   let resizePostion = "right";
 
@@ -39,8 +38,8 @@ function App() {
   function handleMouseMove(e: MouseEvent) {
     const new_X = e.clientX - (parentStartPosition.x === 0 ? e.clientX : parentStartPosition.x);
     const new_Y = e.clientY - (parentStartPosition.x === 0 ? e.clientY : parentStartPosition.y);
-    const body_X = document.documentElement.clientWidth - WRAPPER_CONTAINER_WIDTH;
-    const body_Y = document.documentElement.clientHeight - WRAPPER_CONTAINER_HEIGHT;
+    const body_X = document.documentElement.clientWidth - parentSize.width;
+    const body_Y = document.documentElement.clientHeight - parentSize.height;
     const bounded_X = Math.min(Math.max(new_X, 0), body_X)
     const bounded_Y = Math.min(Math.max(new_Y, 0), body_Y)
     containerPosition.x = (parentSize.width > (WRAPPER_CONTAINER_WIDTH - 4) ?
@@ -66,60 +65,19 @@ function App() {
     document.documentElement.addEventListener("pointerup", handleMouseResizeUp);
   }
 
-  function handleMouseResizeMove(e: PointerEvent) {
-    const temp_size = { ...containerSize }
-    const temp_parent_position = { ...parentPostion }
-
-    if (resizePostion === "right") {
-      const newWidth = containerSize.width
-        + (e.clientX - (parentPostion.x + parentSize.width));
-
-      temp_size.width = Math.min(Math.max(newWidth, WRAPPER_CONTAINER_WIDTH - 4), WINDOW_WIDTH);
-    }
-
-    if (resizePostion === "bottom") {
-      const newHeight = containerSize.height +
-        (e.clientY - (parentPostion.y + parentSize.height));
-
-      temp_size.height = Math.min(Math.max(newHeight, WRAPPER_CONTAINER_HEIGHT - 4), WINDOW_HEIGHT);
-    }
-
-    if (resizePostion === "top") {
-
-      temp_parent_position.y = Math.min(Math.max(e.clientY, 1), containerPosition.y);
-
-      const newY = parentPostion.y - temp_parent_position.y;
-      const newHeight = containerSize.height +
-        newY;
-
-      temp_size.height = Math.max(newHeight, WRAPPER_CONTAINER_HEIGHT - 4);
-
-    }
-
-    if (resizePostion === "left") {
-      temp_parent_position.x = Math.min(Math.max(e.clientX, 1), containerPosition.x);
-
-      const newX = parentPostion.x - temp_parent_position.x;
-      const newWidth = containerSize.width +
-        newX;
-
-      temp_size.width = Math.max(newWidth, WRAPPER_CONTAINER_HEIGHT - 4);
-    }
-
-    if (resizePostion === "bottom-right") {
-      const newWidth = containerSize.width
-        + (e.clientX - (parentPostion.x + parentSize.width));
-
-      temp_size.width = Math.min(Math.max(newWidth, WRAPPER_CONTAINER_WIDTH), WINDOW_WIDTH);
-      const newHeight = containerSize.height +
-        (e.clientY - (parentPostion.y + parentSize.height));
-
-      temp_size.height = Math.min(Math.max(newHeight, WRAPPER_CONTAINER_HEIGHT), WINDOW_HEIGHT);
-    }
-
-
-    setParentPosition(temp_parent_position);
-    setParentSize(temp_size)
+  function handleMouseResizeMove(event: PointerEvent) {
+    handleResize({
+      event: event,
+      containerPosition: containerPosition,
+      containerSize: containerSize,
+      setParentPosition: setParentPosition,
+      setParentSize: setParentSize,
+      parentSize: parentSize,
+      parentPosition: parentPostion,
+      resizePosition: resizePostion,
+      divPosition: divPosition,
+      setDivPosition: setDivPosition
+    })
   }
 
   function handleMouseResizeUp() {
@@ -146,7 +104,8 @@ function App() {
           setDivPosition={setDivPosition}
           divPosition={divPosition}
           wrapperRef={wrapperRef}
-          topBarRef={topBarRef} />
+          topBarRef={topBarRef}
+          parentSize={parentSize} />
 
         <div className='top-bar-container' ref={topBarRef} >
           <div className='select-group'>

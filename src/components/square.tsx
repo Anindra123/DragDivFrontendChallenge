@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import Tooltip from "./tooltip";
 import { createPortal } from "react-dom";
 import { SMALL_BOX_HEIGHT, SMALL_BOX_WIDTH } from "../constants/constants";
+import { ContainerSize } from "../types/ContainerTypes";
 
 interface SquareProps {
     wrapperRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -9,16 +10,16 @@ interface SquareProps {
     setDivPosition: React.Dispatch<React.SetStateAction<{ x: number, y: number }>>,
     currentPosition: string,
     topBarRef: React.MutableRefObject<HTMLDivElement | null>;
-
+    parentSize: ContainerSize
 }
 
 
 
 export default function Square({
-    wrapperRef
-    , topBarRef
+    topBarRef
     , divPosition
     , setDivPosition,
+    parentSize,
     currentPosition }: SquareProps) {
 
     const [isTooltipVisible, setToolTipVisible] = useState(false);
@@ -46,13 +47,8 @@ export default function Square({
         const new_x_position = e.clientX - (startPosition.x === 0 ? e.clientX : startPosition.x);
         const new_y_position = e.clientY - (startPosition.y === 0 ? e.clientY : startPosition.y);
 
-        const parent_container_rect = wrapperRef.current?.getBoundingClientRect();
-
-        const maximum_x_position = parent_container_rect?.width
-            && parent_container_rect.width - SMALL_BOX_WIDTH;
-        const maximum_y_position = parent_container_rect?.height && topBarRect?.height
-            && parent_container_rect.height - SMALL_BOX_HEIGHT;
-
+        const maximum_x_position = parentSize.width - SMALL_BOX_WIDTH;
+        const maximum_y_position = parentSize.height - SMALL_BOX_HEIGHT;
         const boundingX = Math.min(Math.max(new_x_position, 0)
             , maximum_x_position ? maximum_x_position : 0)
         const boundingY = Math.min(Math.max(new_y_position, topBarRect?.height ? topBarRect.height : 0)
