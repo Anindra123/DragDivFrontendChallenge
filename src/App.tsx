@@ -24,13 +24,13 @@ function App() {
   let resizePostion = "right";
 
 
-  let parentStartPosition = { x: 0, y: 0 }
+  let parentStartPosition = INITIAL_PARENT_POSITION
   let containerSize = { width: 0, height: 0 };
+  const containerPosition = INITIAL_PARENT_POSITION
 
   function handleMouseDown(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
 
     parentStartPosition = { x: e.clientX - parentPostion.x, y: e.clientY - parentPostion.y }
-
 
     document.documentElement.addEventListener("mousemove", handleMouseMove)
     document.documentElement.addEventListener("mouseup", handleMouseUp);
@@ -41,10 +41,12 @@ function App() {
     const new_Y = e.clientY - (parentStartPosition.x === 0 ? e.clientY : parentStartPosition.y);
     const body_X = document.documentElement.clientWidth - WRAPPER_CONTAINER_WIDTH;
     const body_Y = document.documentElement.clientHeight - WRAPPER_CONTAINER_HEIGHT;
-
     const bounded_X = Math.min(Math.max(new_X, 0), body_X)
     const bounded_Y = Math.min(Math.max(new_Y, 0), body_Y)
-
+    containerPosition.x = (parentSize.width > (WRAPPER_CONTAINER_WIDTH - 4) ?
+      bounded_X + (parentSize.width - (WRAPPER_CONTAINER_WIDTH - 4)) : bounded_X);
+    containerPosition.y = (parentSize.height > (WRAPPER_CONTAINER_HEIGHT - 4) ?
+      bounded_Y + (parentSize.height - (WRAPPER_CONTAINER_HEIGHT - 4)) : bounded_Y);
     setParentPosition({ x: bounded_X, y: bounded_Y })
   }
 
@@ -67,26 +69,41 @@ function App() {
   function handleMouseResizeMove(e: PointerEvent) {
     const temp_size = { ...containerSize }
     const temp_parent_position = { ...parentPostion }
+
     if (resizePostion === "right") {
       const newWidth = containerSize.width
         + (e.clientX - (parentPostion.x + parentSize.width));
 
-      temp_size.width = Math.min(Math.max(newWidth, WRAPPER_CONTAINER_WIDTH), WINDOW_WIDTH);
+      temp_size.width = Math.min(Math.max(newWidth, WRAPPER_CONTAINER_WIDTH - 4), WINDOW_WIDTH);
     }
 
     if (resizePostion === "bottom") {
       const newHeight = containerSize.height +
         (e.clientY - (parentPostion.y + parentSize.height));
 
-      temp_size.height = Math.min(Math.max(newHeight, WRAPPER_CONTAINER_HEIGHT), WINDOW_HEIGHT);
+      temp_size.height = Math.min(Math.max(newHeight, WRAPPER_CONTAINER_HEIGHT - 4), WINDOW_HEIGHT);
     }
 
     if (resizePostion === "top") {
-      temp_parent_position.y = Math.max(Math.min(e.clientY, parentPostion.y), 0);
 
+      temp_parent_position.y = Math.min(Math.max(e.clientY, 1), containerPosition.y);
+
+      const newY = parentPostion.y - temp_parent_position.y;
       const newHeight = containerSize.height +
-        (parentPostion.y - temp_parent_position.y);
-      temp_size.height = Math.max(newHeight, parentSize.height);
+        newY;
+
+      temp_size.height = Math.max(newHeight, WRAPPER_CONTAINER_HEIGHT - 4);
+
+    }
+
+    if (resizePostion === "left") {
+      temp_parent_position.x = Math.min(Math.max(e.clientX, 1), containerPosition.x);
+
+      const newX = parentPostion.x - temp_parent_position.x;
+      const newWidth = containerSize.width +
+        newX;
+
+      temp_size.width = Math.max(newWidth, WRAPPER_CONTAINER_HEIGHT - 4);
     }
 
     if (resizePostion === "bottom-right") {
@@ -101,8 +118,8 @@ function App() {
     }
 
 
-    setParentSize(temp_size)
     setParentPosition(temp_parent_position);
+    setParentSize(temp_size)
   }
 
   function handleMouseResizeUp() {
