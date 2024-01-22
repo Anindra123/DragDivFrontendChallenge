@@ -19,3 +19,5 @@ export const INITIAL_PARENT_SIZE = {
 
 export const WINDOW_WIDTH = document.documentElement.clientWidth;
 export const WINDOW_HEIGHT = document.documentElement.clientHeight;
+
+export const SIDE_BAR_WIDTH = 304;

@@ -19,7 +19,6 @@ export function handleResize({
   event,
   parentPosition,
   parentSize,
-  containerPosition,
   setParentPosition,
   setParentSize,
   resizePosition,
@@ -41,7 +40,14 @@ export function handleResize({
   }
 
   if (resizePosition === "bottom") {
-    bottom(containerSize, event, temp_size, parentPosition, parentSize);
+    bottom(
+      containerSize,
+      event,
+      temp_size,
+      parentPosition,
+      parentSize,
+      temp_child_position
+    );
   }
 
   if (resizePosition === "top") {
@@ -51,7 +57,7 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      containerPosition
+      temp_child_position
     );
   }
 
@@ -62,7 +68,7 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      containerPosition
+      temp_child_position
     );
   }
 
@@ -75,7 +81,14 @@ export function handleResize({
       parentSize,
       temp_child_position
     );
-    bottom(containerSize, event, temp_size, parentPosition, parentSize);
+    bottom(
+      containerSize,
+      event,
+      temp_size,
+      parentPosition,
+      parentSize,
+      temp_child_position
+    );
   }
   if (resizePosition === "top-left") {
     top(
@@ -84,7 +97,7 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      containerPosition
+      temp_child_position
     );
     left(
       containerSize,
@@ -92,7 +105,7 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      containerPosition
+      temp_child_position
     );
   }
   if (resizePosition === "top-right") {
@@ -102,7 +115,7 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      containerPosition
+      temp_child_position
     );
     right(
       containerSize,
@@ -115,14 +128,21 @@ export function handleResize({
   }
 
   if (resizePosition === "bottom-left") {
-    bottom(containerSize, event, temp_size, parentPosition, parentSize);
+    bottom(
+      containerSize,
+      event,
+      temp_size,
+      parentPosition,
+      parentSize,
+      temp_child_position
+    );
     left(
       containerSize,
       event,
       temp_size,
       parentPosition,
       temp_parent_position,
-      containerPosition
+      temp_child_position
     );
   }
 

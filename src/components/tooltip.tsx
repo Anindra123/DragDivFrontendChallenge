@@ -1,3 +1,4 @@
+import { ContainerSize } from "../types/ContainerTypes";
 
 
 interface TooltipProps {
@@ -7,14 +8,15 @@ interface TooltipProps {
     toolTipRef: React.RefObject<HTMLDivElement>
     currentPosition: string,
     offsetX: number,
-    offsetY: number
+    offsetY: number,
+    containerSize: ContainerSize
 }
 
 export default function Tooltip({ tooltipTitle
     , isVisible,
     currentPosition,
     squareRef,
-    toolTipRef, offsetX, offsetY }: TooltipProps) {
+    toolTipRef, offsetX, offsetY, containerSize }: TooltipProps) {
 
 
     const squareRect = squareRef.current?.getBoundingClientRect();
@@ -52,21 +54,21 @@ export default function Tooltip({ tooltipTitle
     if (currentPosition === "top") {
 
         setTop();
-        if (offsetY < 100) {
+        if (offsetY < 0) {
             setBottom();
         }
     }
     if (currentPosition === "bottom") {
 
         setBottom();
-        if (offsetY > 390) {
+        if (offsetY > containerSize.height - 170) {
             setTop();
         }
 
     }
     if (currentPosition === "right") {
         setRight();
-        if (offsetX > 350) {
+        if (offsetX > containerSize.width - 300) {
             setLeft();
         }
     }

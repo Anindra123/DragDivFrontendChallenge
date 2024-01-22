@@ -9,15 +9,12 @@ interface SquareProps {
     divPosition: { x: number, y: number };
     setDivPosition: React.Dispatch<React.SetStateAction<{ x: number, y: number }>>,
     currentPosition: string,
-    topBarRef: React.MutableRefObject<HTMLDivElement | null>;
     parentSize: ContainerSize
 }
 
 
 
-export default function Square({
-    topBarRef
-    , divPosition
+export default function Square({ divPosition
     , setDivPosition,
     parentSize,
     currentPosition }: SquareProps) {
@@ -25,7 +22,6 @@ export default function Square({
     const [isTooltipVisible, setToolTipVisible] = useState(false);
     const toolTipRef = useRef<HTMLDivElement | null>(null);
     const tootTipRect = toolTipRef.current?.getBoundingClientRect();
-    const topBarRect = topBarRef.current?.getBoundingClientRect();
     const offset_x = divPosition.x - (tootTipRect ? tootTipRect.width : 0)
     const offset_y = divPosition.y - (tootTipRect ? tootTipRect.height : 0)
     const squareRef = useRef<HTMLDivElement | null>(null);
@@ -51,7 +47,7 @@ export default function Square({
         const maximum_y_position = parentSize.height - SMALL_BOX_HEIGHT;
         const boundingX = Math.min(Math.max(new_x_position, 0)
             , maximum_x_position ? maximum_x_position : 0)
-        const boundingY = Math.min(Math.max(new_y_position, topBarRect?.height ? topBarRect.height : 0)
+        const boundingY = Math.min(Math.max(new_y_position, 0)
             , maximum_y_position ? maximum_y_position : 0)
 
         setDivPosition({ x: boundingX, y: boundingY });
@@ -83,12 +79,14 @@ export default function Square({
 
             }}
             ref={squareRef}
+            id="square"
             onMouseOver={handleMouseOver}
             onMouseLeave={() => setToolTipVisible(false)}
         >
 
 
             {createPortal(<Tooltip
+                containerSize={parentSize}
                 offsetX={offset_x}
                 offsetY={offset_y}
                 currentPosition={currentPosition}

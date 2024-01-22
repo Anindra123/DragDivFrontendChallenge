@@ -43,9 +43,7 @@
 
 .wrapper-border {
   position: fixed;
-  /* border-radius: 0.5rem; */
-  /* width: 600px;
-  height: 600px; */
+
   z-index: -100;
 }
 .wrapper-border#right {
@@ -115,6 +113,7 @@
   display: flex;
   column-gap: 0.5rem;
   padding: 0.5rem;
+  user-select: none;
 }
 
 .select-group > select {
@@ -138,5 +137,16 @@
   justify-content: center;
   cursor: grab;
   padding: 0.5rem;
-  /* position: absolute; */
+  position: absolute;
+  right: 0;
+  z-index: -100;
+}
+
+.right-side-bar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  background-color: aliceblue;
+  width: 300px;
 }
