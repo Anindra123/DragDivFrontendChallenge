@@ -1,5 +1,9 @@
 import { ContainerPosition, ContainerSize } from "../types/ContainerTypes";
-import { bottom, left, right, top } from "./ResizeFunctions";
+import { bottom } from "./HandleBottomResize";
+import { left } from "./HandleLeftResize";
+import { right } from "./HandleRightResize";
+import { top } from "./HandleTopResize";
+// import { bottom, left, right, top } from "./ResizeFunctions";
 
 interface handleResizeParams {
   containerSize: ContainerSize;
