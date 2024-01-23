@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Square from './components/square';
 import {
@@ -24,8 +24,14 @@ function App() {
 
   let parentStartPosition = { x: 100, y: 100 }
   let containerSize = { width: 0, height: 0 };
-  const containerPosition = { x: 0, y: 100 }
+  const containerPosition = { x: 0, y: 0 }
 
+  useEffect(() => {
+    const wrapper_right_position = wrapperRef.current?.getBoundingClientRect().right;
+    const wrapper_bottom_position = wrapperRef.current?.getBoundingClientRect().bottom;
+    containerPosition.x = wrapper_right_position ? wrapper_right_position - 100 : 0
+    containerPosition.y = wrapper_bottom_position ? wrapper_bottom_position - 100 : 0
+  }, [wrapperRef, containerPosition.x, containerPosition.y])
 
   function handleMouseDown(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
 
@@ -42,7 +48,6 @@ function App() {
     const body_Y = document.documentElement.clientHeight - parentSize.height;
     const bounded_X = Math.min(Math.max(new_X, 0), body_X)
     const bounded_Y = Math.min(Math.max(new_Y, 0), body_Y)
-    // containerPosition.x = wrapper_right_position ? wrapper_right_position - SMALL_BOX_WIDTH : 0
     setParentPosition({ x: bounded_X, y: bounded_Y })
   }
 
@@ -57,6 +62,10 @@ function App() {
       height: parentSize.height
     }
     resizePostion = e.currentTarget.id;
+    const wrapper_right_position = wrapperRef.current?.getBoundingClientRect().right;
+    const wrapper_bottom_position = wrapperRef.current?.getBoundingClientRect().bottom;
+    containerPosition.x = wrapper_right_position ? (wrapper_right_position - 100) - 4 : 0
+    containerPosition.y = wrapper_bottom_position ? (wrapper_bottom_position - 100) - 4 : 0
 
     document.documentElement.addEventListener("pointermove", handleMouseResizeMove);
     document.documentElement.addEventListener("pointerup", handleMouseResizeUp);
@@ -65,7 +74,6 @@ function App() {
   function handleMouseResizeMove(event: PointerEvent) {
     handleResize({
       event: event,
-      containerPosition: containerPosition,
       containerSize: containerSize,
       setParentPosition: setParentPosition,
       setParentSize: setParentSize,
@@ -73,7 +81,8 @@ function App() {
       parentPosition: parentPostion,
       resizePosition: resizePostion,
       divPosition: divPosition,
-      setDivPosition: setDivPosition
+      setDivPosition: setDivPosition,
+      containerPosition: containerPosition
     })
   }
 

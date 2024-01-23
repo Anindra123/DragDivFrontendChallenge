@@ -6,12 +6,12 @@ interface handleResizeParams {
   event: PointerEvent;
   parentPosition: ContainerPosition;
   parentSize: ContainerSize;
-  containerPosition: ContainerPosition;
   setParentPosition: React.Dispatch<React.SetStateAction<ContainerPosition>>;
   setParentSize: React.Dispatch<React.SetStateAction<ContainerSize>>;
   resizePosition: string;
   divPosition: ContainerPosition;
   setDivPosition: React.Dispatch<React.SetStateAction<ContainerPosition>>;
+  containerPosition: ContainerPosition;
 }
 
 export function handleResize({
@@ -24,6 +24,7 @@ export function handleResize({
   resizePosition,
   divPosition,
   setDivPosition,
+  containerPosition,
 }: handleResizeParams) {
   const temp_size = { ...containerSize };
   const temp_parent_position = { ...parentPosition };
@@ -57,7 +58,8 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      temp_child_position
+      temp_child_position,
+      containerPosition
     );
   }
 
@@ -68,7 +70,8 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      temp_child_position
+      temp_child_position,
+      containerPosition
     );
   }
 
@@ -97,7 +100,8 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      temp_child_position
+      temp_child_position,
+      containerPosition
     );
     left(
       containerSize,
@@ -105,7 +109,8 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      temp_child_position
+      temp_child_position,
+      containerPosition
     );
   }
   if (resizePosition === "top-right") {
@@ -115,7 +120,8 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      temp_child_position
+      temp_child_position,
+      containerPosition
     );
     right(
       containerSize,
@@ -142,7 +148,8 @@ export function handleResize({
       temp_size,
       parentPosition,
       temp_parent_position,
-      temp_child_position
+      temp_child_position,
+      containerPosition
     );
   }
 

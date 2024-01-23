@@ -58,9 +58,13 @@ export const top = (
   tempSize: ContainerSize,
   parentPostion: ContainerPosition,
   temp_parent_position: ContainerPosition,
-  temp_child_position: ContainerPosition
+  temp_child_position: ContainerPosition,
+  containerPosition: ContainerPosition
 ) => {
-  temp_parent_position.y = Math.max(event.clientY, 1);
+  temp_parent_position.y = Math.min(
+    Math.max(event.clientY, 1),
+    containerPosition.y
+  );
 
   const newY = parentPostion.y - temp_parent_position.y;
   const newHeight = containerSize.height + newY;
@@ -85,18 +89,16 @@ export const left = (
   tempSize: ContainerSize,
   parentPostion: ContainerPosition,
   temp_parent_position: ContainerPosition,
-  temp_child_position: ContainerPosition
+  temp_child_position: ContainerPosition,
+  containerPosition: ContainerPosition
 ) => {
   const child_left_position = document
     .getElementById("square")
     ?.getBoundingClientRect().left;
-  const wrapper_right_position = document
-    .getElementById("wrapper")
-    ?.getBoundingClientRect().right;
-
-  const min_width = wrapper_right_position ? wrapper_right_position - 100 : 0;
-  temp_parent_position.x = Math.min(Math.max(event.clientX, 1), min_width);
-
+  temp_parent_position.x = Math.min(
+    Math.max(event.clientX, 1),
+    containerPosition.x
+  );
   const newX = parentPostion.x - temp_parent_position.x;
   const newWidth = containerSize.width + newX;
   tempSize.width = Math.max(newWidth, SMALL_BOX_WIDTH);
