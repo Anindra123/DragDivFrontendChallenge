@@ -3,7 +3,6 @@ import { bottom } from "./HandleBottomResize";
 import { left } from "./HandleLeftResize";
 import { right } from "./HandleRightResize";
 import { top } from "./HandleTopResize";
-// import { bottom, left, right, top } from "./ResizeFunctions";
 
 interface handleResizeParams {
   containerSize: ContainerSize;
@@ -33,128 +32,126 @@ export function handleResize({
   const temp_size = { ...containerSize };
   const temp_parent_position = { ...parentPosition };
   const temp_child_position = { ...divPosition };
-  if (resizePosition === "right") {
-    right(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      parentSize,
-      temp_child_position
-    );
-  }
 
-  if (resizePosition === "bottom") {
-    bottom(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      parentSize,
-      temp_child_position
-    );
-  }
-
-  if (resizePosition === "top") {
-    top(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      temp_parent_position,
-      temp_child_position,
-      containerPosition
-    );
-  }
-
-  if (resizePosition === "left") {
-    left(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      temp_parent_position,
-      temp_child_position,
-      containerPosition
-    );
-  }
-
-  if (resizePosition === "bottom-right") {
-    right(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      parentSize,
-      temp_child_position
-    );
-    bottom(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      parentSize,
-      temp_child_position
-    );
-  }
-  if (resizePosition === "top-left") {
-    top(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      temp_parent_position,
-      temp_child_position,
-      containerPosition
-    );
-    left(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      temp_parent_position,
-      temp_child_position,
-      containerPosition
-    );
-  }
-  if (resizePosition === "top-right") {
-    top(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      temp_parent_position,
-      temp_child_position,
-      containerPosition
-    );
-    right(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      parentSize,
-      temp_child_position
-    );
-  }
-
-  if (resizePosition === "bottom-left") {
-    bottom(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      parentSize,
-      temp_child_position
-    );
-    left(
-      containerSize,
-      event,
-      temp_size,
-      parentPosition,
-      temp_parent_position,
-      temp_child_position,
-      containerPosition
-    );
+  switch (resizePosition) {
+    case "right":
+      right(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        parentSize,
+        temp_child_position
+      );
+      break;
+    case "bottom":
+      bottom(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        parentSize,
+        temp_child_position
+      );
+      break;
+    case "top":
+      top(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        temp_parent_position,
+        temp_child_position,
+        containerPosition
+      );
+      break;
+    case "left":
+      left(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        temp_parent_position,
+        temp_child_position,
+        containerPosition
+      );
+      break;
+    case "bottom-right":
+      right(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        parentSize,
+        temp_child_position
+      );
+      bottom(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        parentSize,
+        temp_child_position
+      );
+      break;
+    case "top-left":
+      top(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        temp_parent_position,
+        temp_child_position,
+        containerPosition
+      );
+      left(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        temp_parent_position,
+        temp_child_position,
+        containerPosition
+      );
+      break;
+    case "top-right":
+      top(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        temp_parent_position,
+        temp_child_position,
+        containerPosition
+      );
+      right(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        parentSize,
+        temp_child_position
+      );
+      break;
+    case "bottom-left":
+      bottom(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        parentSize,
+        temp_child_position
+      );
+      left(
+        containerSize,
+        event,
+        temp_size,
+        parentPosition,
+        temp_parent_position,
+        temp_child_position,
+        containerPosition
+      );
+      break;
   }
 
   setParentPosition(temp_parent_position);
