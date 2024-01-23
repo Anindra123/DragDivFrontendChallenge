@@ -21,3 +21,14 @@ export const WINDOW_WIDTH = document.documentElement.clientWidth;
 export const WINDOW_HEIGHT = document.documentElement.clientHeight;
 
 export const SIDE_BAR_WIDTH = 304;
+
+export const resizeOptions = {
+  LEFT: "left",
+  RIGHT: "right",
+  TOP: "top",
+  BOTTOM: "bottom",
+  TOP_LEFT: "top-left",
+  TOP_RIGHT: "top-right",
+  BOTTOM_LEFT: "bottom-left",
+  BOTTOM_RIGHT: "bottom-right",
+};

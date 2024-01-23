@@ -1,3 +1,4 @@
+import { resizeOptions } from "../constants/constants";
 import { ContainerPosition, ContainerSize } from "../types/ContainerTypes";
 import { bottom } from "./HandleBottomResize";
 import { left } from "./HandleLeftResize";
@@ -15,6 +16,7 @@ interface handleResizeParams {
   divPosition: ContainerPosition;
   setDivPosition: React.Dispatch<React.SetStateAction<ContainerPosition>>;
   containerPosition: ContainerPosition;
+  maxWidth: number;
 }
 
 export function handleResize({
@@ -28,23 +30,25 @@ export function handleResize({
   divPosition,
   setDivPosition,
   containerPosition,
+  maxWidth,
 }: handleResizeParams) {
   const temp_size = { ...containerSize };
   const temp_parent_position = { ...parentPosition };
   const temp_child_position = { ...divPosition };
 
   switch (resizePosition) {
-    case "right":
+    case resizeOptions.RIGHT:
       right(
         containerSize,
         event,
         temp_size,
         parentPosition,
         parentSize,
-        temp_child_position
+        temp_child_position,
+        maxWidth
       );
       break;
-    case "bottom":
+    case resizeOptions.BOTTOM:
       bottom(
         containerSize,
         event,
@@ -54,7 +58,7 @@ export function handleResize({
         temp_child_position
       );
       break;
-    case "top":
+    case resizeOptions.TOP:
       top(
         containerSize,
         event,
@@ -65,7 +69,7 @@ export function handleResize({
         containerPosition
       );
       break;
-    case "left":
+    case resizeOptions.LEFT:
       left(
         containerSize,
         event,
@@ -76,14 +80,15 @@ export function handleResize({
         containerPosition
       );
       break;
-    case "bottom-right":
+    case resizeOptions.BOTTOM_RIGHT:
       right(
         containerSize,
         event,
         temp_size,
         parentPosition,
         parentSize,
-        temp_child_position
+        temp_child_position,
+        maxWidth
       );
       bottom(
         containerSize,
@@ -94,7 +99,7 @@ export function handleResize({
         temp_child_position
       );
       break;
-    case "top-left":
+    case resizeOptions.TOP_LEFT:
       top(
         containerSize,
         event,
@@ -114,7 +119,7 @@ export function handleResize({
         containerPosition
       );
       break;
-    case "top-right":
+    case resizeOptions.TOP_RIGHT:
       top(
         containerSize,
         event,
@@ -130,10 +135,11 @@ export function handleResize({
         temp_size,
         parentPosition,
         parentSize,
-        temp_child_position
+        temp_child_position,
+        maxWidth
       );
       break;
-    case "bottom-left":
+    case resizeOptions.BOTTOM_LEFT:
       bottom(
         containerSize,
         event,

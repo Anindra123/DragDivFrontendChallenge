@@ -5,6 +5,8 @@ import {
   INITIAL_BOX_POSITION, INITIAL_PARENT_POSITION,
   INITIAL_PARENT_SIZE,
   SIDE_BAR_WIDTH,
+  WINDOW_HEIGHT,
+  WINDOW_WIDTH,
 } from './constants/constants';
 import BorderGroup from './components/border-group';
 import { handleResize } from './helper/HandleResizeFunction';
@@ -26,6 +28,12 @@ function App() {
   let containerSize = { width: 0, height: 0 };
   const containerPosition = { x: 0, y: 0 }
 
+
+
+
+  let maxWidth = 0;
+
+
   useEffect(() => {
     const wrapper_right_position = wrapperRef.current?.getBoundingClientRect().right;
     const wrapper_bottom_position = wrapperRef.current?.getBoundingClientRect().bottom;
@@ -44,8 +52,8 @@ function App() {
   function handleMouseMove(e: MouseEvent) {
     const new_X = e.clientX - (parentStartPosition.x === 0 ? e.clientX : parentStartPosition.x);
     const new_Y = e.clientY - (parentStartPosition.x === 0 ? e.clientY : parentStartPosition.y);
-    const body_X = (document.documentElement.clientWidth - parentSize.width) - SIDE_BAR_WIDTH;
-    const body_Y = document.documentElement.clientHeight - parentSize.height;
+    const body_X = (WINDOW_WIDTH - parentSize.width) - SIDE_BAR_WIDTH;
+    const body_Y = WINDOW_HEIGHT - parentSize.height;
     const bounded_X = Math.min(Math.max(new_X, 0), body_X)
     const bounded_Y = Math.min(Math.max(new_Y, 0), body_Y)
     setParentPosition({ x: bounded_X, y: bounded_Y })
@@ -67,6 +75,12 @@ function App() {
     containerPosition.x = wrapper_right_position ? (wrapper_right_position - 100) - 4 : 0
     containerPosition.y = wrapper_bottom_position ? (wrapper_bottom_position - 100) - 4 : 0
 
+    const sidebar_left_position = document
+      .getElementById("right-side-bar")
+      ?.getBoundingClientRect().left;
+
+    const distance_from_sidebar = sidebar_left_position ? sidebar_left_position - e.clientX : 0
+    maxWidth = parentSize.width + distance_from_sidebar;
     document.documentElement.addEventListener("pointermove", handleMouseResizeMove);
     document.documentElement.addEventListener("pointerup", handleMouseResizeUp);
   }
@@ -82,7 +96,8 @@ function App() {
       resizePosition: resizePostion,
       divPosition: divPosition,
       setDivPosition: setDivPosition,
-      containerPosition: containerPosition
+      containerPosition: containerPosition,
+      maxWidth: maxWidth
     })
   }
 
@@ -118,7 +133,7 @@ function App() {
         </a>
       </div >
 
-      <div className='right-side-bar'>
+      <div className='right-side-bar' id='right-side-bar'>
         <div className='select-group'>
 
           <p className='select-input-label'>Tootip Position:</p>

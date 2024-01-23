@@ -75,7 +75,8 @@ export default function Square({ divPosition
                 position: "absolute",
                 cursor: "grab",
                 left: `${divPosition.x}px`,
-                top: `${divPosition.y}px`
+                top: `${divPosition.y}px`,
+                borderRadius: ".5rem"
 
             }}
             ref={squareRef}
