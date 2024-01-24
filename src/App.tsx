@@ -47,7 +47,7 @@ function App() {
     div_initial_position.current.y = child_top_position ? child_top_position : 0;
     containerPosition.x = wrapper_right_position ? wrapper_right_position - 100 : 0
     containerPosition.y = wrapper_bottom_position ? wrapper_bottom_position - 100 : 0
-  }, [wrapperRef, containerPosition.x, containerPosition.y, div_initial_position.x])
+  }, [wrapperRef, containerPosition.x, containerPosition.y])
 
   function handleMouseDown(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
 
