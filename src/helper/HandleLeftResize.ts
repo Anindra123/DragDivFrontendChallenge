@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MutableRefObject } from "react";
 import { SMALL_BOX_WIDTH } from "../constants/constants";
 import { ContainerPosition, ContainerSize } from "../types/ContainerTypes";
 
@@ -9,11 +9,9 @@ export const left = (
   parentPostion: ContainerPosition,
   temp_parent_position: ContainerPosition,
   temp_child_position: ContainerPosition,
-  containerPosition: ContainerPosition
+  containerPosition: ContainerPosition,
+  divInitialPosition: MutableRefObject<{ x: number; y: number }>
 ) => {
-  const child_left_position = document
-    .getElementById("square")
-    ?.getBoundingClientRect().left;
   temp_parent_position.x = Math.min(
     Math.max(event.clientX, 1),
     containerPosition.x
@@ -21,12 +19,16 @@ export const left = (
   const newX = parentPostion.x - temp_parent_position.x;
   const newWidth = containerSize.width + newX;
   tempSize.width = Math.max(newWidth, SMALL_BOX_WIDTH);
-
+  console.log(divInitialPosition.current.x);
   temp_child_position.x = Math.max(
     Math.min(
-      child_left_position ? child_left_position - temp_parent_position.x : 0,
-      child_left_position ? child_left_position : 0
+      divInitialPosition.current.x - temp_parent_position.x,
+      divInitialPosition.current.x
     ),
     0
   );
+  if (temp_child_position.x === 0) {
+    divInitialPosition.current.x -=
+      divInitialPosition.current.x - temp_parent_position.x;
+  }
 };

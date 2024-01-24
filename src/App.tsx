@@ -10,6 +10,8 @@ import {
 } from './constants/constants';
 import BorderGroup from './components/border-group';
 import { handleResize } from './helper/HandleResizeFunction';
+// import { Debounce } from './helper/Debounce';
+// import { Throttle } from './helper/Throttle';
 
 
 
@@ -27,7 +29,7 @@ function App() {
   let parentStartPosition = { x: 100, y: 100 }
   let containerSize = { width: 0, height: 0 };
   const containerPosition = { x: 0, y: 0 }
-
+  const div_initial_position = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
 
 
 
@@ -37,9 +39,15 @@ function App() {
   useEffect(() => {
     const wrapper_right_position = wrapperRef.current?.getBoundingClientRect().right;
     const wrapper_bottom_position = wrapperRef.current?.getBoundingClientRect().bottom;
+    const child_left_position = document
+      .getElementById("square")
+      ?.getBoundingClientRect().left;
+    const child_top_position = document.getElementById("square")?.getBoundingClientRect().top;
+    div_initial_position.current.x = child_left_position ? child_left_position : 0;
+    div_initial_position.current.y = child_top_position ? child_top_position : 0;
     containerPosition.x = wrapper_right_position ? wrapper_right_position - 100 : 0
     containerPosition.y = wrapper_bottom_position ? wrapper_bottom_position - 100 : 0
-  }, [wrapperRef, containerPosition.x, containerPosition.y])
+  }, [wrapperRef, containerPosition.x, containerPosition.y, div_initial_position.x])
 
   function handleMouseDown(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
 
@@ -72,6 +80,17 @@ function App() {
     resizePostion = e.currentTarget.id;
     const wrapper_right_position = wrapperRef.current?.getBoundingClientRect().right;
     const wrapper_bottom_position = wrapperRef.current?.getBoundingClientRect().bottom;
+
+    const child_left_position = document
+      .getElementById("square")
+      ?.getBoundingClientRect().left;
+
+    const child_top_position = document.getElementById("square")?.getBoundingClientRect().top;
+
+    div_initial_position.current.x = child_left_position ? child_left_position : 0;
+    div_initial_position.current.y = child_top_position ? child_top_position : 0;
+
+
     containerPosition.x = wrapper_right_position ? (wrapper_right_position - 100) - 4 : 0
     containerPosition.y = wrapper_bottom_position ? (wrapper_bottom_position - 100) - 4 : 0
 
@@ -86,6 +105,8 @@ function App() {
   }
 
   function handleMouseResizeMove(event: PointerEvent) {
+    // const throttle_call =
+    // Throttle(() => {
     handleResize({
       event: event,
       containerSize: containerSize,
@@ -97,8 +118,11 @@ function App() {
       divPosition: divPosition,
       setDivPosition: setDivPosition,
       containerPosition: containerPosition,
-      maxWidth: maxWidth
+      maxWidth: maxWidth,
+      divInitialPosition: div_initial_position
     })
+    // }, 1000)
+    // throttle_call();
   }
 
   function handleMouseResizeUp() {

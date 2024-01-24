@@ -1,3 +1,4 @@
+import { MutableRefObject } from "react";
 import { resizeOptions } from "../constants/constants";
 import { ContainerPosition, ContainerSize } from "../types/ContainerTypes";
 import { bottom } from "./HandleBottomResize";
@@ -17,6 +18,7 @@ interface handleResizeParams {
   setDivPosition: React.Dispatch<React.SetStateAction<ContainerPosition>>;
   containerPosition: ContainerPosition;
   maxWidth: number;
+  divInitialPosition: MutableRefObject<{ x: number; y: number }>;
 }
 
 export function handleResize({
@@ -31,6 +33,7 @@ export function handleResize({
   setDivPosition,
   containerPosition,
   maxWidth,
+  divInitialPosition,
 }: handleResizeParams) {
   const temp_size = { ...containerSize };
   const temp_parent_position = { ...parentPosition };
@@ -66,7 +69,8 @@ export function handleResize({
         parentPosition,
         temp_parent_position,
         temp_child_position,
-        containerPosition
+        containerPosition,
+        divInitialPosition
       );
       break;
     case resizeOptions.LEFT:
@@ -77,7 +81,8 @@ export function handleResize({
         parentPosition,
         temp_parent_position,
         temp_child_position,
-        containerPosition
+        containerPosition,
+        divInitialPosition
       );
       break;
     case resizeOptions.BOTTOM_RIGHT:
@@ -107,7 +112,8 @@ export function handleResize({
         parentPosition,
         temp_parent_position,
         temp_child_position,
-        containerPosition
+        containerPosition,
+        divInitialPosition
       );
       left(
         containerSize,
@@ -116,7 +122,8 @@ export function handleResize({
         parentPosition,
         temp_parent_position,
         temp_child_position,
-        containerPosition
+        containerPosition,
+        divInitialPosition
       );
       break;
     case resizeOptions.TOP_RIGHT:
@@ -127,7 +134,8 @@ export function handleResize({
         parentPosition,
         temp_parent_position,
         temp_child_position,
-        containerPosition
+        containerPosition,
+        divInitialPosition
       );
       right(
         containerSize,
@@ -155,7 +163,8 @@ export function handleResize({
         parentPosition,
         temp_parent_position,
         temp_child_position,
-        containerPosition
+        containerPosition,
+        divInitialPosition
       );
       break;
   }
