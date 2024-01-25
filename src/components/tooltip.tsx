@@ -1,51 +1,52 @@
+import { useContext } from "react";
 import { useToolTip } from "../hooks/useTooltip";
-import { ContainerPosition, ContainerSize } from "../types/ContainerTypes";
+// import { ContainerPosition, ContainerSize } from "../types/ContainerTypes";
+import { ContainerContext } from "../context/ContainerContext";
 
 
 interface TooltipProps {
     tooltipTitle: string,
     isVisible: boolean,
     toolTipRef: React.RefObject<HTMLDivElement>
-    currentPosition: string,
-    divPosition: ContainerPosition
-    containerSize: ContainerSize,
+
     squareRect: DOMRect | undefined
 }
 
 export default function Tooltip({ tooltipTitle
     , isVisible,
-    currentPosition,
-    toolTipRef, containerSize, squareRect, divPosition
+
+    toolTipRef, squareRect,
 }: TooltipProps) {
     const toolTipRect = toolTipRef.current?.getBoundingClientRect();
+    const { divPosition, currentToolTipPosition, parentSize } = useContext(ContainerContext)
     const [offsetX, offsetY, tooltip_position,
         setTop, setBottom, setLeft, setRight] = useToolTip({
             squareRect: squareRect,
             divPosition: divPosition, toolTipRect: toolTipRect
         })
-    if (currentPosition === "top") {
+    if (currentToolTipPosition === "top") {
 
         setTop();
         if (offsetY < 0) {
             setBottom();
         }
     }
-    if (currentPosition === "bottom") {
+    if (currentToolTipPosition === "bottom") {
 
         setBottom();
-        if (offsetY > containerSize.height - 170) {
+        if (offsetY > parentSize.height - 170) {
             setTop();
         }
 
     }
-    if (currentPosition === "right") {
+    if (currentToolTipPosition === "right") {
         setRight();
-        if (offsetX > containerSize.width - 300) {
+        if (offsetX > parentSize.width - 300) {
             setLeft();
         }
     }
 
-    if (currentPosition === "left") {
+    if (currentToolTipPosition === "left") {
         setLeft();
         if (offsetX < 0) {
             setRight();
