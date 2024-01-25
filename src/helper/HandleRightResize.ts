@@ -19,12 +19,10 @@ export const right = (
     .getElementById("square")
     ?.getBoundingClientRect().left;
 
-  tempSize.width = Math.min(Math.max(newWidth, SMALL_BOX_WIDTH + 4), maxWidth);
-
-  console.log(parentSize.width);
+  tempSize.width = Math.min(Math.max(newWidth, SMALL_BOX_WIDTH), maxWidth);
 
   temp_child_position.x = Math.min(
     child_left_position ? child_left_position - parentPostion.x : 0,
-    tempSize.width - (SMALL_BOX_WIDTH + 4)
+    tempSize.width - SMALL_BOX_WIDTH
   );
 };

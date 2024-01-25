@@ -22,9 +22,6 @@ export const top = (
 
   tempSize.height = Math.max(newHeight, SMALL_BOX_HEIGHT);
 
-  // const child_top_position = document
-  //   .getElementById("square")
-  //   ?.getBoundingClientRect().top;
   temp_child_position.y = Math.max(
     Math.min(
       divInitialPosition.current.y - temp_parent_position.y,

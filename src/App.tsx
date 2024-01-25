@@ -10,8 +10,8 @@ import {
 } from './constants/constants';
 import BorderGroup from './components/border-group';
 import { handleResize } from './helper/HandleResizeFunction';
-// import { Debounce } from './helper/Debounce';
-// import { Throttle } from './helper/Throttle';
+import { throttle } from './helper/Throttle';
+
 
 
 
@@ -35,6 +35,15 @@ function App() {
 
   let maxWidth = 0;
 
+  const handleMouseMove = throttle((e: MouseEvent) => {
+    const new_X = e.clientX - (parentStartPosition.x === 0 ? e.clientX : parentStartPosition.x);
+    const new_Y = e.clientY - (parentStartPosition.x === 0 ? e.clientY : parentStartPosition.y);
+    const body_X = (WINDOW_WIDTH - parentSize.width) - SIDE_BAR_WIDTH;
+    const body_Y = WINDOW_HEIGHT - parentSize.height;
+    const bounded_X = Math.min(Math.max(new_X, 0), body_X)
+    const bounded_Y = Math.min(Math.max(new_Y, 0), body_Y)
+    setParentPosition({ x: bounded_X, y: bounded_Y })
+  }, 10)
 
   useEffect(() => {
     const wrapper_right_position = wrapperRef.current?.getBoundingClientRect().right;
@@ -57,15 +66,7 @@ function App() {
     document.documentElement.addEventListener("mouseup", handleMouseUp);
   }
 
-  function handleMouseMove(e: MouseEvent) {
-    const new_X = e.clientX - (parentStartPosition.x === 0 ? e.clientX : parentStartPosition.x);
-    const new_Y = e.clientY - (parentStartPosition.x === 0 ? e.clientY : parentStartPosition.y);
-    const body_X = (WINDOW_WIDTH - parentSize.width) - SIDE_BAR_WIDTH;
-    const body_Y = WINDOW_HEIGHT - parentSize.height;
-    const bounded_X = Math.min(Math.max(new_X, 0), body_X)
-    const bounded_Y = Math.min(Math.max(new_Y, 0), body_Y)
-    setParentPosition({ x: bounded_X, y: bounded_Y })
-  }
+
 
   function handleMouseUp() {
     document.documentElement.removeEventListener("mousemove", handleMouseMove)
@@ -91,8 +92,8 @@ function App() {
     div_initial_position.current.y = child_top_position ? child_top_position : 0;
 
 
-    containerPosition.x = wrapper_right_position ? (wrapper_right_position - 100) - 4 : 0
-    containerPosition.y = wrapper_bottom_position ? (wrapper_bottom_position - 100) - 4 : 0
+    containerPosition.x = wrapper_right_position ? (wrapper_right_position - 100) : 0
+    containerPosition.y = wrapper_bottom_position ? (wrapper_bottom_position - 100) : 0
 
     const sidebar_left_position = document
       .getElementById("right-side-bar")
@@ -105,8 +106,7 @@ function App() {
   }
 
   function handleMouseResizeMove(event: PointerEvent) {
-    // const throttle_call =
-    // Throttle(() => {
+
     handleResize({
       event: event,
       containerSize: containerSize,
@@ -121,8 +121,7 @@ function App() {
       maxWidth: maxWidth,
       divInitialPosition: div_initial_position
     })
-    // }, 1000)
-    // throttle_call();
+
   }
 
   function handleMouseResizeUp() {

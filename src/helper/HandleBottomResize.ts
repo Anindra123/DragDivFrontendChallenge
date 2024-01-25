@@ -19,12 +19,12 @@ export const bottom = (
     ?.getBoundingClientRect().top;
 
   tempSize.height = Math.min(
-    Math.max(newHeight, SMALL_BOX_HEIGHT + 4),
+    Math.max(newHeight, SMALL_BOX_HEIGHT),
     WINDOW_HEIGHT
   );
 
   temp_child_position.y = Math.min(
-    tempSize.height - (SMALL_BOX_HEIGHT + 4),
+    tempSize.height - SMALL_BOX_HEIGHT,
     child_top_position ? child_top_position - parentPostion.y : 0
   );
 };

@@ -1,12 +1,16 @@
-export const Throttle = (callback: () => void, time: number) => {
+export function throttle<T extends (...args: never[]) => void>(
+  callback: T,
+  time: number
+) {
   let pause = false;
-  return () => {
+
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
     if (pause) return;
+    callback.apply(this, args);
     pause = true;
-    callback();
 
     setTimeout(() => {
       pause = false;
     }, time);
   };
-};
+}
