@@ -19,12 +19,10 @@ export default function Square({ divPosition
     parentSize,
     currentPosition }: SquareProps) {
 
-    const [isTooltipVisible, setToolTipVisible] = useState(false);
     const toolTipRef = useRef<HTMLDivElement | null>(null);
-    const tootTipRect = toolTipRef.current?.getBoundingClientRect();
-    const offset_x = divPosition.x - (tootTipRect ? tootTipRect.width : 0)
-    const offset_y = divPosition.y - (tootTipRect ? tootTipRect.height : 0)
     const squareRef = useRef<HTMLDivElement | null>(null);
+    const squareRect = squareRef.current?.getBoundingClientRect();
+    const [isTooltipVisible, setToolTipVisible] = useState(false);
     let startPosition = { x: 0, y: 0 };
 
     function handleMouseDown(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -88,13 +86,13 @@ export default function Square({ divPosition
 
             {createPortal(<Tooltip
                 containerSize={parentSize}
-                offsetX={offset_x}
-                offsetY={offset_y}
+                squareRect={squareRect}
+                divPosition={divPosition}
                 currentPosition={currentPosition}
                 toolTipRef={toolTipRef}
                 tooltipTitle="Tooltip"
                 isVisible={isTooltipVisible}
-                squareRef={squareRef}
+
             />, document.body)}
 
 
