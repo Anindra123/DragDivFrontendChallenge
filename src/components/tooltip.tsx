@@ -1,56 +1,28 @@
-import { ContainerSize } from "../types/ContainerTypes";
+import { useToolTip } from "../hooks/useTooltip";
+import { ContainerPosition, ContainerSize } from "../types/ContainerTypes";
 
 
 interface TooltipProps {
     tooltipTitle: string,
     isVisible: boolean,
-    squareRef: React.RefObject<HTMLDivElement | null>
     toolTipRef: React.RefObject<HTMLDivElement>
     currentPosition: string,
-    offsetX: number,
-    offsetY: number,
-    containerSize: ContainerSize
+    divPosition: ContainerPosition
+    containerSize: ContainerSize,
+    squareRect: DOMRect | undefined
 }
 
 export default function Tooltip({ tooltipTitle
     , isVisible,
     currentPosition,
-    squareRef,
-    toolTipRef, offsetX, offsetY, containerSize }: TooltipProps) {
-
-
-    const squareRect = squareRef.current?.getBoundingClientRect();
-
-    const tooltip_position = {
-        x: squareRect && squareRect.left,
-        y: squareRect && squareRect.top
-    }
-
-    function setTop() {
-        tooltip_position.y = squareRect?.top;
-        if (tooltip_position.y) tooltip_position.y -= 35;
-        if (tooltip_position.x) tooltip_position.x = squareRect?.left;
-    }
-    function setBottom() {
-        tooltip_position.y = squareRect?.top;
-        if (tooltip_position.y) tooltip_position.y += squareRect ? (squareRect.height + 10) : 0
-        if (tooltip_position.x) tooltip_position.x = squareRect?.left
-    }
-    function setLeft() {
-        tooltip_position.x = squareRect?.left;
-        if (tooltip_position.x) tooltip_position.x -= squareRect ? (squareRect.width + 10) : 0
-        if (tooltip_position.y) tooltip_position.y = squareRect?.top && squareRect?.top + 30;
-
-    }
-    function setRight() {
-        tooltip_position.x = squareRect?.left;
-        if (tooltip_position.x) tooltip_position.x += squareRect ? (squareRect.width + 10) : 0
-        if (tooltip_position.y) tooltip_position.y = squareRect?.top && squareRect?.top + 30;
-
-    }
-
-
-
+    toolTipRef, containerSize, squareRect, divPosition
+}: TooltipProps) {
+    const toolTipRect = toolTipRef.current?.getBoundingClientRect();
+    const [offsetX, offsetY, tooltip_position,
+        setTop, setBottom, setLeft, setRight] = useToolTip({
+            squareRect: squareRect,
+            divPosition: divPosition, toolTipRect: toolTipRect
+        })
     if (currentPosition === "top") {
 
         setTop();

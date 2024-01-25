@@ -1,13 +1,10 @@
-import { useState } from "react";
-import { ToolTipParamType } from "../types/TooltipTypes";
+import { ToolTipParamType, ToolTipReturnType } from "../types/TooltipTypes";
 
 export function useToolTip({
   squareRect,
-  isVisible,
   divPosition,
   toolTipRect,
-}: ToolTipParamType) {
-  const [isTooltipVisible, setToolTipVisible] = useState(isVisible);
+}: ToolTipParamType): ToolTipReturnType {
   const offset_x = divPosition.x - (toolTipRect ? toolTipRect.width : 0);
   const offset_y = divPosition.y - (toolTipRect ? toolTipRect.height : 0);
   const tooltip_position = {
@@ -41,13 +38,12 @@ export function useToolTip({
   }
 
   return [
+    offset_x,
+    offset_y,
+    tooltip_position,
     setTop,
     setBottom,
     setLeft,
     setRight,
-    isTooltipVisible,
-    setToolTipVisible,
-    offset_x,
-    offset_y,
   ];
 }
