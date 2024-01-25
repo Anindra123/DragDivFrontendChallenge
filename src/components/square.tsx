@@ -1,24 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Tooltip from "./tooltip";
 import { createPortal } from "react-dom";
 import { SMALL_BOX_HEIGHT, SMALL_BOX_WIDTH } from "../constants/constants";
-import { ContainerSize } from "../types/ContainerTypes";
-
-interface SquareProps {
-    wrapperRef: React.MutableRefObject<HTMLDivElement | null>;
-    divPosition: { x: number, y: number };
-    setDivPosition: React.Dispatch<React.SetStateAction<{ x: number, y: number }>>,
-    currentPosition: string,
-    parentSize: ContainerSize
-}
+import { ContainerContext } from "../context/ContainerContext";
 
 
 
-export default function Square({ divPosition
-    , setDivPosition,
-    parentSize,
-    currentPosition }: SquareProps) {
+export default function Square() {
 
+    const { divPosition, setDivPosition, parentSize } = useContext(ContainerContext)
     const toolTipRef = useRef<HTMLDivElement | null>(null);
     const squareRef = useRef<HTMLDivElement | null>(null);
     const squareRect = squareRef.current?.getBoundingClientRect();
@@ -85,10 +75,8 @@ export default function Square({ divPosition
 
 
             {createPortal(<Tooltip
-                containerSize={parentSize}
+
                 squareRect={squareRect}
-                divPosition={divPosition}
-                currentPosition={currentPosition}
                 toolTipRef={toolTipRef}
                 tooltipTitle="Tooltip"
                 isVisible={isTooltipVisible}

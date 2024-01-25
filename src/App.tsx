@@ -5,12 +5,15 @@ import {
   INITIAL_BOX_POSITION, INITIAL_PARENT_POSITION,
   INITIAL_PARENT_SIZE,
   SIDE_BAR_WIDTH,
+  SMALL_BOX_HEIGHT,
+  SMALL_BOX_WIDTH,
   WINDOW_HEIGHT,
   WINDOW_WIDTH,
 } from './constants/constants';
 import BorderGroup from './components/border-group';
 import { handleResize } from './helper/HandleResizeFunction';
 import { throttle } from './helper/Throttle';
+import { ContainerContext } from './context/ContainerContext';
 
 
 
@@ -36,8 +39,10 @@ function App() {
   let maxWidth = 0;
 
   const handleMouseMove = throttle((e: MouseEvent) => {
-    const new_X = e.clientX - (parentStartPosition.x === 0 ? e.clientX : parentStartPosition.x);
-    const new_Y = e.clientY - (parentStartPosition.x === 0 ? e.clientY : parentStartPosition.y);
+    const new_X = e.clientX - (parentStartPosition.x === 0 ?
+      e.clientX : parentStartPosition.x);
+    const new_Y = e.clientY - (parentStartPosition.x === 0 ?
+      e.clientY : parentStartPosition.y);
     const body_X = (WINDOW_WIDTH - parentSize.width) - SIDE_BAR_WIDTH;
     const body_Y = WINDOW_HEIGHT - parentSize.height;
     const bounded_X = Math.min(Math.max(new_X, 0), body_X)
@@ -54,8 +59,10 @@ function App() {
     const child_top_position = document.getElementById("square")?.getBoundingClientRect().top;
     div_initial_position.current.x = child_left_position ? child_left_position : 0;
     div_initial_position.current.y = child_top_position ? child_top_position : 0;
-    containerPosition.x = wrapper_right_position ? wrapper_right_position - 100 : 0
-    containerPosition.y = wrapper_bottom_position ? wrapper_bottom_position - 100 : 0
+    containerPosition.x = wrapper_right_position ?
+      wrapper_right_position - SMALL_BOX_WIDTH : 0
+    containerPosition.y = wrapper_bottom_position ?
+      wrapper_bottom_position - SMALL_BOX_HEIGHT : 0
   }, [wrapperRef, containerPosition.x, containerPosition.y])
 
   function handleMouseDown(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
@@ -92,14 +99,17 @@ function App() {
     div_initial_position.current.y = child_top_position ? child_top_position : 0;
 
 
-    containerPosition.x = wrapper_right_position ? (wrapper_right_position - 100) : 0
-    containerPosition.y = wrapper_bottom_position ? (wrapper_bottom_position - 100) : 0
+    containerPosition.x = wrapper_right_position ?
+      (wrapper_right_position - SMALL_BOX_WIDTH) : 0
+    containerPosition.y = wrapper_bottom_position ?
+      (wrapper_bottom_position - SMALL_BOX_HEIGHT) : 0
 
     const sidebar_left_position = document
       .getElementById("right-side-bar")
       ?.getBoundingClientRect().left;
 
-    const distance_from_sidebar = sidebar_left_position ? sidebar_left_position - e.clientX : 0
+    const distance_from_sidebar = sidebar_left_position ?
+      sidebar_left_position - e.clientX : 0
     maxWidth = parentSize.width + distance_from_sidebar;
     document.documentElement.addEventListener("pointermove", handleMouseResizeMove);
     document.documentElement.addEventListener("pointerup", handleMouseResizeUp);
@@ -143,12 +153,13 @@ function App() {
         width: `${parentSize.width}px`
       }} ref={wrapperRef} id='wrapper'>
 
-        <Square
-          currentPosition={currentPosition}
-          setDivPosition={setDivPosition}
-          divPosition={divPosition}
-          wrapperRef={wrapperRef}
-          parentSize={parentSize} />
+        <ContainerContext.Provider value={{
+          setDivPosition: setDivPosition
+          , divPosition: divPosition, parentSize: parentSize
+          , currentToolTipPosition: currentPosition
+        }}>
+          <Square />
+        </ContainerContext.Provider>
 
 
         <a className='move-handler' onMouseDown={handleMouseDown}>
